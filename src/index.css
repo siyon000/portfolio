@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens — two dark personas, each with its own identity      */
+/*  BUILD  (default)  = graphite + electric azure   (developer)        */
+/*  BREACH (.dark)    = onyx black + metallic gold  (security)         */
+/* ------------------------------------------------------------------ */
+:root {
+  --radius: 0.75rem;
+
+  --background: #0c0e13;
+  --foreground: #e7eaf1;
+  --card: #12151d;
+  --card-foreground: #e7eaf1;
+  --popover: #12151d;
+  --popover-foreground: #e7eaf1;
+
+  --primary: #5b8cff;              /* electric azure */
+  --primary-foreground: #0b0d12;
+  --secondary: #171b24;
+  --secondary-foreground: #e7eaf1;
+  --muted: #171b24;
+  --muted-foreground: #8b93a5;
+  --accent: #171b24;
+  --accent-foreground: #e7eaf1;
+  --destructive: #f87171;
+
+  --border: #1e2431;
+  --input: #1e2431;
+  --ring: #5b8cff;
+
+  /* custom */
+  --accent2: #22d3ee;
+  --beam-from: #5b8cff;
+  --beam-to: #22d3ee;
+  --glow: rgba(91, 140, 255, 0.16);
+  --glow2: rgba(34, 211, 238, 0.09);
+}
+
+.dark {
+  --background: #08080a;
+  --foreground: #ece7d8;
+  --card: #111012;
+  --card-foreground: #ece7d8;
+  --popover: #111012;
+  --popover-foreground: #ece7d8;
+
+  --primary: #e6b93f;             /* metallic gold */
+  --primary-foreground: #0a0908;
+  --secondary: #181611;
+  --secondary-foreground: #ece7d8;
+  --muted: #181611;
+  --muted-foreground: #968d78;
+  --accent: #181611;
+  --accent-foreground: #ece7d8;
+  --destructive: #f87171;
+
+  --border: #262017;
+  --input: #262017;
+  --ring: #e6b93f;
+
+  --accent2: #c99a2e;
+  --beam-from: #f2d27a;           /* champagne -> deep gold */
+  --beam-to: #c99329;
+  --glow: rgba(230, 185, 63, 0.13);
+  --glow2: rgba(201, 154, 46, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent2: var(--accent2);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base + ambient background (layered depth, no grid)                 */
+/* ------------------------------------------------------------------ */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 2rem;
+  }
+  body {
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--background);
+    background-image:
+      radial-gradient(55% 48% at 84% -8%, var(--glow), transparent 62%),
+      radial-gradient(48% 42% at -4% 2%, var(--glow2), transparent 60%),
+      radial-gradient(40% 60% at 50% 120%, var(--glow2), transparent 60%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    transition: background-color 500ms ease, color 500ms ease;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+}
+
+/* extra glow concentrated behind the hero */
+.hero-glow {
+  background: radial-gradient(46% 52% at 76% 16%, var(--glow), transparent 70%);
+  transition: background 500ms ease;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Marquee (velora) utilities                                         */
+/* ------------------------------------------------------------------ */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% - var(--gap))); }
+}
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-100% - var(--gap))); }
+}
+.animate-marquee { animation: marquee var(--duration) linear infinite; }
+.animate-marquee-vertical { animation: marquee-vertical var(--duration) linear infinite; }
+
+/* rotating conic seal for certifications */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 9s linear infinite; }
+
+/* ------------------------------------------------------------------ */
+/*  Orbiting circles (velora) — skills rings                          */
+/*  Requires --angle / --radius / --duration set per orbiting item.   */
+/* ------------------------------------------------------------------ */
+@keyframes orbit {
+  0% {
+    transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+  }
+  100% {
+    transform: rotate(calc((var(--angle) + 360) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) + 360) * -1deg));
+  }
+}
+.animate-orbit { animation: orbit calc(var(--duration) * 1s) linear infinite; }
+
+/* ------------------------------------------------------------------ */
+/*  View Transition — circular "wipe" reveal on persona flip           */
+/*  Default crossfade is disabled here; SiteDock's flip() drives a     */
+/*  clip-path circle animation on ::view-transition-new(root) that     */
+/*  expands outward from the toggle button's click position.          */
+/* ------------------------------------------------------------------ */
+::view-transition-group(root) {
+  animation-duration: 550ms;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  .animate-marquee, .animate-marquee-vertical, .animate-spin-slow, .animate-orbit { animation: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}
